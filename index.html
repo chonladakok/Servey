@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบสำรวจการจัดการเรียนการสอนรายวิชาระบบผิวหนังและเนื้อเยื่อเกี่ยวพันที่เกี่ยวข้อง ปีการศึกษา 2569</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=8">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Login / Personalized Entry -->
+        <div id="login-section" class="card active-section">
+            <h1 class="survey-title">แบบสำรวจการจัดการเรียนการสอนรายวิชาระบบผิวหนังและเนื้อเยื่อเกี่ยวพันที่เกี่ยวข้อง ปีการศึกษา 2569</h1>
+            <p class="survey-subtitle">กรุณาพิมพ์หรือเลือกชื่อของท่านจากรายชื่อ เพื่อเข้าสู่แบบสำรวจรายวิชาฯ</p>
+            <div class="form-group">
+                <label for="prof-name">ชื่อ-นามสกุล (เลือกจากรายการ)</label>
+                <input type="text" id="prof-name" list="prof-names" placeholder="เช่น สมชาย ใจดี" />
+                <datalist id="prof-names">
+                    <!-- Injected via JS -->
+                </datalist>
+            </div>
+            <button class="btn btn-primary" onclick="login()">เข้าสู่ระบบแบบสำรวจ</button>
+            <p id="login-error" class="error-msg"></p>
+        </div>
+
+        <!-- Survey Section -->
+        <div id="survey-section" class="card hidden-section">
+            <div class="survey-header">
+                <h1 class="survey-title">แบบสำรวจการจัดการเรียนการสอนรายวิชาระบบผิวหนังและเนื้อเยื่อเกี่ยวพันที่เกี่ยวข้อง ปีการศึกษา 2569</h1>
+                <p class="prof-welcome">ยินดีต้อนรับ, <span id="prof-name-display" class="highlight">อาจารย์</span></p>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="progress-container">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step active" id="indicator-1">1</div>
+                    <div class="step" id="indicator-2">2</div>
+                    <div class="step" id="indicator-3">3</div>
+                </div>
+                <div class="progress-labels">
+                    <span>รายวิชา</span>
+                    <span>วิดีโอ</span>
+                    <span>ผลประโยชน์ทับซ้อน</span>
+                </div>
+            </div>
+
+            <form id="survey-form">
+                
+                <!-- Step 1: Teaching Topics -->
+                <div class="step-content active-step" id="step-1">
+                    <div class="section-block">
+                        <h2>1. หัวข้อที่รับผิดชอบสอนในภาคการศึกษานี้</h2>
+                        <p class="hint">เลือกรูปแบบการสอนของแต่ละหัวข้อ (วัน-เวลา และผู้สอนร่วม)</p>
+                        
+                        <div class="bulk-actions">
+                            <button type="button" class="btn btn-sm btn-outline" onclick="selectAllFormat('onsite')">เลือก Onsite ทั้งหมด</button>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="selectAllFormat('online')">เลือก Online ทั้งหมด</button>
+                        </div>
+
+                        <div id="topics-container">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                    <div class="form-actions flex-end">
+                        <button type="button" class="btn btn-primary step-btn" onclick="nextStep(2)">ถัดไป ➔</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Video Recording -->
+                <div class="step-content hidden-step" id="step-2">
+                    <div class="section-block">
+                        <h2>2. การบันทึกวิดีโอการสอน</h2>
+                        <p class="hint">อนุญาตให้บันทึกวิดีโอการสอนเพื่อใช้สำหรับทบทวนบน Classroom ของรายวิชาหรือไม่?</p>
+                        <div class="radio-group small">
+                            <label class="radio-card radio-positive">
+                                <input type="radio" name="video-record" value="allow" required>
+                                <span class="card-content">
+                                    <span class="icon">✅</span>
+                                    <span class="text">อนุญาตให้บันทึก</span>
+                                </span>
+                            </label>
+                            <label class="radio-card radio-negative">
+                                <input type="radio" name="video-record" value="deny" required>
+                                <span class="card-content">
+                                    <span class="icon">🚫</span>
+                                    <span class="text">ไม่อนุญาต</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions space-between">
+                        <button type="button" class="btn btn-secondary step-btn" onclick="prevStep(1)">⬅ ย้อนกลับ</button>
+                        <button type="button" class="btn btn-primary step-btn" onclick="nextStep(3)">ถัดไป ➔</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Conflict of Interest (COI) -->
+                <div class="step-content hidden-step" id="step-3">
+                    <div class="section-block">
+                        <h2>3. การแสดงความจำนงเรื่องผลประโยชน์ทับซ้อน (Conflict of Interest)</h2>
+                        <div class="info-box">
+                            <p><strong>โปรดอ่าน:</strong> <a href="ประกาศ.pdf" target="_blank" class="doc-link">ประกาศคณะแพทยศาสตร์วชิรพยาบาล เรื่อง แนวปฏิบัติเพื่อป้องกันการมีผลประโยชน์ทับซ้อนด้านการศึกษา (PDF) 📄</a></p>
+                        </div>
+                        
+                        <div class="student-list-container">
+                            <h3>รายชื่อนักศึกษาในรายวิชา</h3>
+                            <div class="student-list large-list" id="student-list-display">
+                                <!-- Injected via JS -->
+                            </div>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="coi-ack" required>
+                                <span class="checkmark"></span>
+                                ข้าพเจ้าได้รับทราบและอ่านประกาศเรื่องแนวปฏิบัติเพื่อป้องกันการมีผลประโยชน์ทับซ้อนด้านการศึกษาเรียบร้อยแล้ว
+                            </label>
+                        </div>
+
+                        <h3>ท่านมีผลประโยชน์ทับซ้อนกับนักศึกษาในรายชื่อข้างต้นหรือไม่?</h3>
+                        <div class="radio-group small">
+                            <label class="radio-card radio-positive">
+                                <input type="radio" name="coi-status" value="no" required>
+                                <span class="card-content">
+                                    <span class="icon">✅</span>
+                                    <span class="text">ไม่มีผลประโยชน์ทับซ้อน</span>
+                                </span>
+                            </label>
+                            <label class="radio-card radio-negative">
+                                <input type="radio" name="coi-status" value="yes" required>
+                                <span class="card-content">
+                                    <span class="icon">⚠️</span>
+                                    <span class="text">มีผลประโยชน์ทับซ้อน</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions space-between">
+                        <button type="button" class="btn btn-secondary step-btn" onclick="prevStep(2)">⬅ ย้อนกลับ</button>
+                        <button type="submit" class="btn btn-primary submit-btn step-btn">ส่งแบบสำรวจ ✅</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-section" class="card hidden-section success-msg">
+            <div class="success-icon">✅</div>
+            <h2>ส่งแบบสำรวจสำเร็จ!</h2>
+            <p>ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
